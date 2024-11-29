@@ -1,61 +1,28 @@
-import { ref, set, onValue, push, onDisconnect, serverTimestamp, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { ref, set, onValue, push, serverTimestamp, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // DOM elementleri
-const loginSection = document.getElementById('loginSection');
-const chatSection = document.getElementById('chatSection');
-const nameInput = document.getElementById('nameInput');
-const loginBtn = document.getElementById('loginBtn');
 const messageInput = document.getElementById('messageInput');
 const sendBtn = document.getElementById('sendBtn');
 const messageList = document.getElementById('messageList');
 const userList = document.getElementById('userList');
-const userNameDisplay = document.getElementById('userName');
-const logoutBtn = document.getElementById('logoutBtn');
 
-let currentUser = null;
 const database = window.db;
 
-// Giriş işlemi
-loginBtn.addEventListener('click', () => {
-    const username = nameInput.value.trim();
-    if (username) {
-        currentUser = {
-            id: Date.now().toString(),
-            name: username,
-            lastActive: serverTimestamp()
-        };
+// Rastgele kullanıcı adı oluştur
+const randomId = Math.random().toString(36).substring(7);
+const userName = `Misafir${randomId}`;
 
-        // Kullanıcıyı çevrimiçi kullanıcılar listesine ekle
-        const userRef = ref(database, 'users/' + currentUser.id);
-        set(userRef, currentUser);
-        
-        // Kullanıcı çıkış yaptığında veya bağlantı koptuğunda
-        onDisconnect(userRef).remove();
-
-        // Arayüzü güncelle
-        loginSection.style.display = 'none';
-        chatSection.style.display = 'flex';
-        userNameDisplay.textContent = username;
-        logoutBtn.style.display = 'block';
-        
-        // Son mesajları yükle
-        loadMessages();
-    }
+// Kullanıcıyı çevrimiçi kullanıcılar listesine ekle
+const userRef = ref(database, 'users/' + randomId);
+set(userRef, {
+    id: randomId,
+    name: userName,
+    lastActive: serverTimestamp()
 });
 
-// Çıkış işlemi
-logoutBtn.addEventListener('click', () => {
-    if (currentUser) {
-        const userRef = ref(database, 'users/' + currentUser.id);
-        set(userRef, null);
-        currentUser = null;
-        loginSection.style.display = 'block';
-        chatSection.style.display = 'none';
-        userNameDisplay.textContent = '';
-        logoutBtn.style.display = 'none';
-        messageList.innerHTML = '';
-        nameInput.value = '';
-    }
+// Kullanıcı sayfadan ayrıldığında
+window.addEventListener('beforeunload', () => {
+    set(userRef, null);
 });
 
 // Mesaj gönderme
@@ -68,10 +35,10 @@ messageInput.addEventListener('keypress', (e) => {
 
 function sendMessage() {
     const message = messageInput.value.trim();
-    if (message && currentUser) {
+    if (message) {
         const newMessage = {
-            userId: currentUser.id,
-            userName: currentUser.name,
+            userId: randomId,
+            userName: userName,
             text: message,
             timestamp: serverTimestamp()
         };
@@ -83,22 +50,21 @@ function sendMessage() {
 }
 
 // Mesajları yükleme ve dinleme
-function loadMessages() {
-    const messagesRef = ref(database, 'messages');
-    const messagesQuery = query(messagesRef, orderByChild('timestamp'), limitToLast(100));
-    
-    onValue(messagesQuery, (snapshot) => {
-        messageList.innerHTML = '';
-        snapshot.forEach((childSnapshot) => {
-            const message = childSnapshot.val();
-            displayMessage(message);
-        });
+const messagesRef = ref(database, 'messages');
+const messagesQuery = query(messagesRef, orderByChild('timestamp'), limitToLast(100));
+
+onValue(messagesQuery, (snapshot) => {
+    messageList.innerHTML = '';
+    snapshot.forEach((childSnapshot) => {
+        const message = childSnapshot.val();
+        displayMessage(message);
     });
-}
+    messageList.scrollTop = messageList.scrollHeight;
+});
 
 function displayMessage(message) {
     const messageElement = document.createElement('div');
-    messageElement.className = `message ${message.userId === currentUser?.id ? 'own' : ''}`;
+    messageElement.className = `message ${message.userId === randomId ? 'own' : ''}`;
     
     const time = message.timestamp ? new Date(message.timestamp).toLocaleTimeString('tr-TR', {
         hour: '2-digit',
@@ -107,14 +73,13 @@ function displayMessage(message) {
 
     messageElement.innerHTML = `
         <div class="message-content">
-            ${message.userId !== currentUser?.id ? `<strong>${message.userName}</strong><br>` : ''}
+            ${message.userId !== randomId ? `<strong>${message.userName}</strong><br>` : ''}
             ${message.text}
         </div>
         <div class="message-info">${time}</div>
     `;
 
     messageList.appendChild(messageElement);
-    messageList.scrollTop = messageList.scrollHeight;
 }
 
 // Çevrimiçi kullanıcıları dinleme

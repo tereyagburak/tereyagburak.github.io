@@ -36,10 +36,8 @@ header {
     padding: 1rem;
     border-radius: var(--border-radius);
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 1rem;
+    text-align: center;
 }
 
 header h1 {
@@ -47,45 +45,11 @@ header h1 {
     font-size: 1.8rem;
 }
 
-.login-section {
-    background: white;
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    max-width: 400px;
-    margin: auto;
-    text-align: center;
-}
-
-.login-section input {
-    width: 100%;
-    padding: 0.8rem;
-    margin: 1rem 0;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-}
-
-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: var(--secondary-color);
-}
-
 main {
     flex: 1;
     display: flex;
     gap: 1rem;
-    height: calc(100vh - 150px);
+    height: calc(100vh - 100px);
 }
 
 .chat-container {
@@ -128,6 +92,7 @@ main {
     font-size: 0.8rem;
     color: #666;
     margin-top: 0.2rem;
+    text-align: right;
 }
 
 .message-input {
@@ -148,6 +113,16 @@ main {
 .message-input button {
     padding: 0.8rem;
     width: 50px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.message-input button:hover {
+    background-color: var(--secondary-color);
 }
 
 .online-users {
