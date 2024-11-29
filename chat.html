@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canlı Sohbet</title>
+    <link rel="stylesheet" href="chat-style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Canlı Sohbet</h1>
+            <div id="userInfo">
+                <span id="userName"></span>
+                <button id="logoutBtn" style="display: none;">Çıkış Yap</button>
+            </div>
+        </header>
+
+        <div id="loginSection" class="login-section">
+            <h2>Giriş Yap</h2>
+            <input type="text" id="nameInput" placeholder="Kullanıcı adınızı girin">
+            <button id="loginBtn">Sohbete Katıl</button>
+        </div>
+
+        <main id="chatSection" style="display: none;">
+            <div class="chat-container">
+                <div id="messageList" class="message-list">
+                    <!-- Mesajlar buraya gelecek -->
+                </div>
+                <div class="message-input">
+                    <input type="text" id="messageInput" placeholder="Mesajınızı yazın...">
+                    <button id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="online-users">
+                <h3>Çevrimiçi Kullanıcılar</h3>
+                <ul id="userList">
+                    <!-- Kullanıcı listesi buraya gelecek -->
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+        
+        // Firebase yapılandırması config.js'den geliyor
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+
+        // Global olarak database'i kullanılabilir yapıyoruz
+        window.db = database;
+    </script>
+    <script src="config.js"></script>
+    <script src="chat.js" type="module"></script>
+</body>
+</html>
