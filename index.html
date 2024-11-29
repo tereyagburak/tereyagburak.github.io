@@ -1,11 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to My GitHub Page</title>
+    <title>Video İzleme Platformu</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Merhaba, burası benim GitHub Pages sitem!</h1>
+    <div class="container">
+        <header>
+            <h1>Video İzleme Platformu</h1>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <h2>Video Yükle</h2>
+                <div class="upload-area" id="dropZone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Videoyu buraya sürükleyin veya seçin</p>
+                    <input type="file" id="fileInput" accept="video/*">
+                </div>
+                <div class="progress-bar" id="uploadProgress" style="display: none;">
+                    <div class="progress"></div>
+                </div>
+            </section>
+
+            <section class="video-player-section">
+                <h2>Video Oynatıcı</h2>
+                <div class="video-container">
+                    <video id="videoPlayer" controls>
+                        <p>Tarayıcınız video elementini desteklemiyor.</p>
+                    </video>
+                </div>
+            </section>
+
+            <section class="video-list-section">
+                <h2>Video Listesi</h2>
+                <div class="video-grid" id="videoList">
+                    <!-- Video listesi buraya dinamik olarak eklenecek -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Video İzleme Platformu</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
 </body>
 </html>
